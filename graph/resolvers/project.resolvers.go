@@ -8,7 +8,6 @@ import (
 	"strconv"
 )
 
-// CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input model.ProjectInput) (*model.GqlProject, error) {
 	project := &models.Project{
 		Name:        input.Name,
@@ -31,7 +30,6 @@ func (r *mutationResolver) CreateProject(ctx context.Context, input model.Projec
 	return projectResult, nil
 }
 
-// UpdateProject is the resolver for the updateProject field.
 func (r *mutationResolver) UpdateProject(ctx context.Context, id string, input model.ProjectInput) (*model.GqlProject, error) {
 	context := common.GetContext(ctx)
 
@@ -55,7 +53,6 @@ func (r *mutationResolver) UpdateProject(ctx context.Context, id string, input m
 	return &projectResult, nil
 }
 
-// Projects is the resolver for the projects field.
 func (r *queryResolver) Projects(ctx context.Context) ([]*model.GqlProject, error) {
 	context := common.GetContext(ctx)
 
@@ -77,4 +74,37 @@ func (r *queryResolver) Projects(ctx context.Context) ([]*model.GqlProject, erro
 	}
 
 	return projectsResult, nil
+}
+
+func (r *mutationResolver) DeleteProject(ctx context.Context, id string) (bool, error) {
+	context := common.GetContext(ctx)
+
+	// TODO: review if the project exists
+
+	err := context.Database.Delete(&models.Project{}, id).Error
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (r *queryResolver) Project(ctx context.Context, id string) (*model.GqlProject, error) {
+	context := common.GetContext(ctx)
+
+	var projectResult *model.GqlProject
+	var project *models.Project
+
+	err := context.Database.Find(&project, id).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	projectResult = &model.GqlProject{
+		ID:   strconv.FormatUint(uint64(project.ID), 10),
+		Name: project.Name}
+
+	return projectResult, nil
 }
