@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"stats-mockupero/graph"
+	"stats-mockupero/graph/common"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -18,10 +19,19 @@ func main() {
 		port = defaultPort
 	}
 
+	db, err := common.InitDb()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
+	customCtx := &common.CustomContext{
+		Database: db,
+	}
+
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	http.Handle("/query", common.CreateContext(customCtx, srv))
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

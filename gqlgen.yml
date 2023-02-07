@@ -17,11 +17,16 @@ model:
   filename: graph/model/models_gen.go
   package: model
 
+models:
+  Todo:
+    model: stats-mockerero/graph/models/models.Todo
+
 # Where should the resolver implementations go?
 resolver:
   layout: follow-schema
-  dir: graph
+  dir: graph/resolvers
   package: graph
+  filename_template: "{name}.resolvers.go"
 
 # Optional: turn on use ` + "`" + `gqlgen:"fieldName"` + "`" + ` tags in your models
 # struct_tag: json
