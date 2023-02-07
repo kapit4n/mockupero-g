@@ -9,7 +9,7 @@ import (
 )
 
 // CreateProject is the resolver for the createProject field.
-func (r *mutationResolver) CreateProject(ctx context.Context, input model.NewProject) (*model.GqlProject, error) {
+func (r *mutationResolver) CreateProject(ctx context.Context, input model.ProjectInput) (*model.GqlProject, error) {
 	project := &models.Project{
 		Name:        input.Name,
 		Description: *input.Description,

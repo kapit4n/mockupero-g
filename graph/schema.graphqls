@@ -31,13 +31,15 @@ input NewTodo {
   userId: String!
 }
 
-input NewProject {
+input ProjectInput {
   name: String!
   description: String
   ownerId: String!
 }
 
+
+
 type Mutation {
   createTodo(input: NewTodo!): GqlTodo!
-  createProject(input: NewProject!): GqlProject!
+  createProject(input: ProjectInput!): GqlProject!
 }

@@ -21,13 +21,13 @@ type GqlUser struct {
 	Name string `json:"name"`
 }
 
-type NewProject struct {
-	Name        string  `json:"name"`
-	Description *string `json:"description"`
-	OwnerID     string  `json:"ownerId"`
-}
-
 type NewTodo struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`
+}
+
+type ProjectInput struct {
+	Name        string  `json:"name"`
+	Description *string `json:"description"`
+	OwnerID     string  `json:"ownerId"`
 }
