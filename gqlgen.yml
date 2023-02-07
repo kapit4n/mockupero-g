@@ -17,9 +17,6 @@ model:
   filename: graph/model/models_gen.go
   package: model
 
-models:
-  Todo:
-    model: stats-mockerero/graph/models/models.Todo
 
 # Where should the resolver implementations go?
 resolver:

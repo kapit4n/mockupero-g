@@ -9,11 +9,7 @@ import (
 	"strconv"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	//return &model.Todo{ID: "1", Text: input.Text}, nil
-	//panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
-
+func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.GqlTodo, error) {
 	context := common.GetContext(ctx)
 	todo := &models.Todo{
 		Text: input.Text,
@@ -22,7 +18,7 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 
 	err := context.Database.Create(&todo).Error
 
-	todoResult := &model.Todo{ID: string(todo.ID), Text: todo.Text}
+	todoResult := &model.GqlTodo{ID: string(todo.ID), Text: todo.Text}
 
 	if err != nil {
 		return nil, err
@@ -31,11 +27,10 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	return todoResult, nil
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+func (r *queryResolver) Todos(ctx context.Context) ([]*model.GqlTodo, error) {
 	context := common.GetContext(ctx)
 	var todos []*models.Todo
-	var todosResult []*model.Todo
+	var todosResult []*model.GqlTodo
 
 	err := context.Database.Find(&todos).Error
 	if err != nil {
@@ -48,7 +43,7 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 		xType := fmt.Sprintf("%T", todo.ID)
 		fmt.Println(xType) // "[]int"
 
-		todosResult = append(todosResult, &model.Todo{ID: strconv.FormatUint(uint64(todo.ID), 10), Text: todo.Text})
+		todosResult = append(todosResult, &model.GqlTodo{ID: strconv.FormatUint(uint64(todo.ID), 10), Text: todo.Text})
 	}
 
 	return todosResult, nil
