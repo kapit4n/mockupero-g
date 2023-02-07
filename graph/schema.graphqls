@@ -42,4 +42,5 @@ input ProjectInput {
 type Mutation {
   createTodo(input: NewTodo!): GqlTodo!
   createProject(input: ProjectInput!): GqlProject!
+  updateProject(id: ID!, input: ProjectInput!): GqlProject!
 }
