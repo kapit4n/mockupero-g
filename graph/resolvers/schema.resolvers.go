@@ -1,4 +1,4 @@
-package graph
+package resolvers
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -8,17 +8,62 @@ import (
 	"context"
 	"fmt"
 	"stats-mockupero/graph"
+	"stats-mockupero/graph/common"
 	"stats-mockupero/graph/model"
+	models "stats-mockupero/graph/models"
+	"strconv"
 )
 
 // CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.GqlTodo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+func (r *mutationResolver) CreateTodo2(ctx context.Context, input model.NewTodo) (*model.GqlTodo, error) {
+	context := common.GetContext(ctx)
+	todo := &models.Todo{
+		Text: input.Text,
+		Done: false,
+	}
+
+	err := context.Database.Create(&todo).Error
+
+	todoResult := &model.GqlTodo{ID: string(todo.ID), Text: todo.Text}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return todoResult, nil
+}
+
+// CreateProject is the resolver for the createProject field.
+func (r *mutationResolver) CreateProject2(ctx context.Context, input model.NewProject) (*model.GqlProject, error) {
+	panic(fmt.Errorf("not implemented: CreateProject - createProject"))
 }
 
 // Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.GqlTodo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+func (r *queryResolver) Todos2(ctx context.Context) ([]*model.GqlTodo, error) {
+	context := common.GetContext(ctx)
+	var todos []*models.Todo
+	var todosResult []*model.GqlTodo
+
+	err := context.Database.Find(&todos).Error
+	if err != nil {
+		return nil, err
+	}
+
+	for _, todo := range todos {
+		fmt.Println(todo.ID)
+
+		xType := fmt.Sprintf("%T", todo.ID)
+		fmt.Println(xType) // "[]int"
+
+		todosResult = append(todosResult, &model.GqlTodo{ID: strconv.FormatUint(uint64(todo.ID), 10), Text: todo.Text})
+	}
+
+	return todosResult, nil
+}
+
+// Projects is the resolver for the projects field.
+func (r *queryResolver) Projects2(ctx context.Context) ([]*model.GqlProject, error) {
+	panic(fmt.Errorf("not implemented: Projects - projects"))
 }
 
 // Mutation returns graph.MutationResolver implementation.

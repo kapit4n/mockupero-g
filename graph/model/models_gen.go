@@ -2,6 +2,13 @@
 
 package model
 
+type GqlProject struct {
+	ID          string   `json:"id"`
+	Name        string   `json:"name"`
+	Description *string  `json:"description"`
+	Owner       *GqlUser `json:"owner"`
+}
+
 type GqlTodo struct {
 	ID   string   `json:"id"`
 	Text string   `json:"text"`
@@ -12,6 +19,12 @@ type GqlTodo struct {
 type GqlUser struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type NewProject struct {
+	Name        string  `json:"name"`
+	Description *string `json:"description"`
+	OwnerID     string  `json:"ownerId"`
 }
 
 type NewTodo struct {

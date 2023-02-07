@@ -14,8 +14,16 @@ type GqlUser {
   name: String!
 }
 
+type GqlProject {
+  id: ID!
+  name: String!
+  description: String
+  owner: GqlUser!
+}
+
 type Query {
   todos: [GqlTodo!]!
+  projects: [GqlProject!]!
 }
 
 input NewTodo {
@@ -23,6 +31,13 @@ input NewTodo {
   userId: String!
 }
 
+input NewProject {
+  name: String!
+  description: String
+  ownerId: String!
+}
+
 type Mutation {
   createTodo(input: NewTodo!): GqlTodo!
+  createProject(input: NewProject!): GqlProject!
 }

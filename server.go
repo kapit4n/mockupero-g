@@ -6,6 +6,7 @@ import (
 	"os"
 	"stats-mockupero/graph"
 	"stats-mockupero/graph/common"
+	"stats-mockupero/graph/resolvers"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -24,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &resolvers.Resolver{}}))
 
 	customCtx := &common.CustomContext{
 		Database: db,
